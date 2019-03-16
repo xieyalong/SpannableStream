@@ -27,66 +27,112 @@ public class MainActivity extends AppCompatActivity {
     private void initTextView1() {
         TextView mTextView1 = (TextView) findViewById(R.id.textView1);
         SpannableStream.with(this)
-                .appendText("Example 1").aligmentCenter().bold().underline().relativeTextSize(1.5f).appendNewLine()
-                .appendText("ForegroundColor").colorRes(android.R.color.holo_red_light).appendNewLine()
-                .appendText("BackgroundColor").bgColorRes(android.R.color.holo_orange_light).color(Color.WHITE).appendNewLine(2)
-                .appendText("Bold,").bold()
+                //追加文字
+                .appendText("Example 1")
+                //文字居中 和最好使用aligmentLeft，aligmentCenter，aligmentRight
+                .aligmentCenter()
+                //下划线
+                .underline()
+                //换行
+                .appendNewLine()
+                //追加文字
+                .appendText("ForegroundColor")
+                //字体颜色
+                .colorRes(android.R.color.holo_red_light).appendNewLine()
+                //追加文字
+                .appendText("BackgroundColor")
+                //背景颜色
+                .bgColorRes(android.R.color.holo_orange_light)
+                //字体颜色
+                .color(Color.BLUE)
+                //换几行
+                .appendNewLine(2)
+                //追加文字
+                .appendText("Bold,")
+                //粗体
+                .bold()
+                //斜体
                 .appendText("Italic,").italic()
-                .appendText("UnderLine,").underline()
-                .appendText("StrikeThrough").strikeThrough().appendNewLine().appendNewLine()
-                .appendText("Plain").appendText("SuperScript").superScript().appendText("SubScript").subScript().appendNewLine(2)
+                //中划线
+                .appendText("StrikeThrough").strikeThrough().appendNewLine(2)
+                .appendText("Plain").
+                //文字向上突出
+                appendText("SuperScript").superScript()
+                //文字向下突出
+                .appendText("SubScript").subScript().appendNewLine(2)
+                //dp文字大小
                 .appendText("40dp ").textSizeDp(40)
+                //px文字大小
                 .appendText("40px ").textSizePx(40)
+                //sp文字大小
                 .appendText("40sp").textSizeSp(40).appendNewLine(2)
+
                 .appendText("1.0x TextSize")
-                .appendText("1.5x TextSize").relativeTextSize(1.5f).appendNewLine()
+                .appendText("1.5x TextSize").
+                //类似于字体大小
+                relativeTextSize(1f).appendNewLine()
+                //变形
                 .appendText("ScaleX").scaleX(4).appendNewLine()
-                .appendImage(R.mipmap.ic_launcher).appendText("ImageSpan").colorRes(android.R.color.holo_green_light).appendNewLine()
-                .appendUrlText("http://github.com").appendNewLine()
+                //中间插入图片
+                .appendImage(R.mipmap.ic_launcher).appendText("ImageSpan").appendNewLine()
+                //网页地址
+                .appendUrlText("https://www.baidu.com").appendNewLine()
+                //字体靠左
                 .appendText("Aligment Left").aligmentLeft().appendNewLine()
+                //字体居中
                 .appendText("Aligment Middle").aligmentCenter().appendNewLine()
+                //字体靠右
                 .appendText("Aligment Right").aligmentRight().appendNewLine(2)
-                .appendNewLine(5)
+                .appendText("-------------------------------------").colorRes(android.R.color.holo_red_light).aligmentCenter().appendNewLine()
                 .into(mTextView1);
     }
 
     private void initTextView2() {
+        //替换的样式
         SpannableOperate mReplaceAttributes = SpannableOperate.with(this)
                 .italic()
                 .relativeTextSize(2f)
                 .onClick(ColorConfig.getDefault()
+                                //正常字体颜色
                                 .colorNormal(this, android.R.color.holo_blue_light)
+                                //正常背景颜色
                                 .bgColorNormal(Color.TRANSPARENT)
+                                //按下字体颜色
                                 .colorPressed(Color.WHITE)
+                                //按下背景颜色
                                 .bgColorPressed(this, android.R.color.holo_red_light)
                         , new SimpleSpannableClickListener() {
                             @Override
                             public void onSpannableItemClick(View widget, CharSequence str) {
-                                Toast.makeText(widget.getContext(), str, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(widget.getContext(), "替换样式="+str, Toast.LENGTH_SHORT).show();
                             }
                         });
 
         SpannableStream.with(this)
-                .configueAlwaysLineBreak(true)
-                .appendText("Example 2").aligmentCenter().bold().relativeTextSize(1.5f).underline()
-                .appendText("You can click here")
+                .appendText("这是onClick")
                 .onClick(ColorConfig.getDefault()
-                                .colorPressed(this, android.R.color.holo_green_light)
-                                .colorNormal(this, android.R.color.holo_red_light)
+                                .colorNormal(this, android.R.color.holo_red_light)//正常字体颜色
+                                .colorPressed(this, android.R.color.holo_green_light)//按下字体颜色
+                                .bgColorNormal(getResources().getColor(R.color.colorPrimary))//正常背景颜色
+                                .bgColorPressed(getResources().getColor(R.color.colorPrimaryDark))//按下背景颜色
                         , new IClickable.OnSpannableClickListener() {
+                            //单机事件
                             @Override
                             public void onSpannableItemClick(View widget, CharSequence str) {
+                                Toast.makeText(MainActivity.this, "单机事件内容="+str, Toast.LENGTH_SHORT).show();
                             }
-
+                            //按下 弹起事件
                             @Override
                             public void onPressedStateChanged(boolean isPressed) {
-                                Toast.makeText(MainActivity.this, "Finger " + (isPressed ? "Down" : "Up"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "b=" + (isPressed ? "按下" : "弹起"), Toast.LENGTH_SHORT).show();
                             }
                         })
-                .aligmentCenter().relativeTextSize(1.5f)
-                .appendText(R.string.text)
+                //设置属性
+                .aligmentCenter().textSizeSp(20).underline().appendNewLine()
+//                .appendText(R.string.text)
+                .appendText("可以替换文本{text}中所有指定{text}的样式，例如替换本段中的“text”")
+                //对“text”替换样式
                 .replaceString("text", mReplaceAttributes)
-                .appendNewLine(20)
                 .into(this, R.id.textView2);
     }
 }
